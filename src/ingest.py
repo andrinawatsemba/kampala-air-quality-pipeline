@@ -37,6 +37,7 @@ def fetch_kampala_data(past_days: int = 2) -> pd.DataFrame:
         WEATHER_URL, ["temperature_2m", "relative_humidity_2m", "precipitation"], past_days
     )
     merged = air.merge(weather, on="time", how="inner")
+    merged["is_forecast"] = merged["time"] > pd.Timestamp.now(tz=TIMEZONE).tz_localize(None)
     log.info("Fetched %d hourly rows (%s to %s)", len(merged), merged["time"].min(), merged["time"].max())
     return merged
 

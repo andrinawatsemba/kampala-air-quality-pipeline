@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    container_name: airquality-db
+    environment:
+      POSTGRES_DB: airquality
+      POSTGRES_USER: pipeline
+      POSTGRES_PASSWORD: ${PGPASSWORD:-pipeline_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Runs once, the first time the database is created
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+volumes:
+  pgdata:
